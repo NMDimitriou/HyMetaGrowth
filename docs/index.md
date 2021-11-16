@@ -8,7 +8,7 @@
 
 - For more information on the usage of the code, please have a look on the [README](https://github.com/NMDimitriou/HyMetaGrowth/blob/main/README.md) file
 
-# Suport or Contact
+## Suport or Contact
 For any question feel free to contact me at nikolaos.dimitriou [at] mail.mcgill.ca
 
 ### Markdown
