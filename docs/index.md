@@ -1,8 +1,15 @@
-## Welcome to GitHub Pages
+## HyMetaGrowth
 
-You can use the [editor on GitHub](https://github.com/NMDimitriou/HyMetaGrowth/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# Code and data
+- The associated code can be found in the repository of [HyMetaGrowth](https://github.com/NMDimitriou/HyMetaGrowth).
+
+- The data associated with this study can be found [here](https://figshare.com/projects/3D-GROWTH-MDA-MB-231-SERIES-12/118989)
+
+- For more information on the usage of the code, please have a look on the [README](https://github.com/NMDimitriou/HyMetaGrowth/blob/main/README.md) file
+
+# Suport or Contact
+For any question feel free to contact me at nikolaos.dimitriou [at] mail.mcgill.ca
 
 ### Markdown
 
