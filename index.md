@@ -15,4 +15,4 @@ Hybrid Discrete-Continuum model of cancer growth with applications in
 For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill.ca
 
 ## Citing
-If you intend to use this code in your publications, please cite:
+If you intend to use this code or data in your publications, please cite:
