@@ -11,7 +11,7 @@ Hybrid Discrete-Continuum model of cancer growth with applications in
 
 - Details on the data processing and segmentation pipeline can be found [here](https://www.biorxiv.org/content/10.1101/2021.07.29.454312v1).
 
-## Suport or Contact
+## Support or Contact
 For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill.ca
 
 ## Citing
