@@ -11,9 +11,6 @@ Hybrid Discrete-Continuum model of cancer growth with applications in
 
 - Details on the data processing and segmentation pipeline can be found [here](https://www.biorxiv.org/content/10.1101/2021.07.29.454312v1).
 
-## Suport or Contact
-For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill.ca
-
 ## Prerequisites
   - [CUDA version ≥ 10](https://developer.nvidia.com/cuda-downloads)
   - [Π4U package](https://github.com/cselab/pi4u)
@@ -200,6 +197,9 @@ expression of the model we use is the following:
 [3] Franssen, L. C., Lorenzi, T., Burgess, A. E. F., & Chaplain, M. A. J. (2019). A Mathematical Framework for Modelling the Metastatic Spread of Cancer. Bulletin of Mathematical Biology, 81(6), 1965–2010. https://doi.org/10.1007/s11538-019-00597-x
 
 [4] Botev, Z. I., Grotowski, J. F., Kroese, D. P., & others. (2010). Kernel density estimation via diffusion. The Annals of Statistics, 38(5), 2916–2957.
+
+## Suport or Contact
+For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill.ca
 
 ## Citing
 If you intend to use this code in your publications, please cite:
