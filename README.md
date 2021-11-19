@@ -87,7 +87,7 @@ simulated and experimental data.
 1. **Code compilation.** Go to `Calibration_Continuum/model`.
  Then run `make`.
 
-2. Include the model parameters in the `params_test.txt` file.
+2. **Model parameters.** Include the model parameters in the `params_test.txt` file.
 Note that the model takes 5 parameters (see the mathematical formulation in
 the following chapters) + 1 parameter for the experimental error
 (recuired for calibration).
@@ -96,15 +96,18 @@ corresponds to 2.5×2.5×0.9 mm^3 space. The simulation time is set to 14. To
 change these parameters, feel free to modify the variables found in `main.cu`
 and `simulate.cu`.
 
-3. The initial conditions (ICs) for the simulation are found in
-`Calibration_Continuum/IC` directory. The ICs can be the density profiles at day 0 of the
+3. **Initial Conditions.** The initial conditions (ICs)
+for the simulation are found in
+`Calibration_Continuum/IC` directory.
+The ICs can be the density profiles at day 0 of the
 experimental data or your favorite 3D matrix. The ICs should be given in binary
 format. In the directory of the ICs you can also include the experimental data
 for the calibration of the model. The ICs and experimental data files should have
 the same spatial dimensions as your simulation space. The experimental data that
 accompany this code correspond to days 0, 2, 5, 7, 9, 12, 14, with day 0 the IC.
 
-4. Once you have set the ICs, the experimental data, and the parameters open
+4. **Execution.** Once you have set the ICs,
+the experimental data, and the parameters open
 the `doall_test.sh` file. This file executes 3 files; the `main_parent` file
 is responsible for loading and unloading the ICs and experimental data to
 the shared memory, and the `main` that executes the simulation. The `main_parent` file takes the following input format
@@ -135,18 +138,19 @@ in vtk format. To alter the time-points where saving takes place go
 to the `simulate.cu` file.
 
 ### Calibration on the continuum level
-1. Go to the TMCMC directory and compile the code by running `make`.
+1. **TMCMC compilation.**
+Go to the TMCMC directory and compile the code by running `make`.
+Then, copy the produced `sample` file from the `TMCMC` directory one directory above (ie `Calibration_Continuum`).
 
-2. Copy the `sample` file from the `TMCMC` directory to `Simulations`.
-
-3. Go to `Simulations/model` directory. In the
+3. **Optimizations.** Go to `Simulations/model` directory. In the
 `Makefile` comment the lines `SIMU_OPTION += -DSAVE_DATA` and
 `SIMU_OPTION += -DNRMSE` to make the simulation faster. Compile the code by
 running `make`.
 
 4. The `doall.sh` file will be called by the TMCMC algorithm. This file
 runs the simulation. Make sure that the `./main` command (in the `doall.sh`)
-file has the correct arguments (see previous chapter).
+file has the correct arguments (see previous chapter). Also, make sure to
+set the correct number of GPUs that will be used in the calibration.
 
 5. Go to `Simulations` directory. To run the calibration in one GPU, simply type
 
@@ -165,7 +169,7 @@ the parametrization.
 ### Visualization of parameter posterior distributions
 1. Go to the `Visualization` directory
 
-2. Open the `plot_data.R` file and modify the fname according the file you want
+2. Open the `plot_samples.R` file and modify the fname according the file you want
 to open and plot. Then run script in R. The files produced by the TMCMC that have
 the pattern
 `curgen*.txt` contain the posterior distributions (PDFs) of the candidate
