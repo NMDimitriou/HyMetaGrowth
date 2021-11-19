@@ -1,5 +1,5 @@
 #include "declarations.cuh"
-#include "kernels_new.cu"
+#include "kernels.cu"
 
 /* Initialize parameters for GPUs
  * Nikolaos Dimitriou, McGill, 2021
@@ -46,6 +46,9 @@ dim3 threads_edge;
 
 dim3 dimBlock;
 dim3 dimGrid ;
+
+
+
 
 //function to allocate device memory and initialize data
 void gpuInitialize(InitialData& id, DataArray& host, DataArray& device1, DataArray& device2)
@@ -147,7 +150,7 @@ void gpuInitialize(InitialData& id, DataArray& host, DataArray& device1, DataArr
 
 	//allocate device arrays
 	int size = total * sizeof(double);
-	#if ( MODEL == FK || MODEL == KSC || MODEL == KSMD || MODEL == KSCMD || MODEL == TEST)	
+#if ( MODEL == FK || MODEL == KSC || MODEL == KSMD || MODEL == KSCMD || MODEL == TEST)	
 	cudaMalloc((void**)&device1.a		, size);
 	cudaMalloc((void**)&device2.a		, size);
 	cudaMalloc((void**)&device1.a_rows      , size);
@@ -162,14 +165,13 @@ void gpuInitialize(InitialData& id, DataArray& host, DataArray& device1, DataArr
     cudaMalloc((void**)&device1.a_cy        , size);
     cudaMalloc((void**)&device1.a_cz        , size);
 	// Copy host to device
-	cudaMemcpy(device1.a            , host.a                , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device2.a            , host.a                , size              , cudaMemcpyHostToDevice);
-	cudaMemcpy(device1.a_rows       , host.a_rows           , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device1.a_cols       , host.a_cols           , size              , cudaMemcpyHostToDevice);
-	#endif
-
+	cudaMemcpy(device1.a        , host.a            , size              , cudaMemcpyHostToDevice);
+    cudaMemcpy(device2.a        , host.a            , size              , cudaMemcpyHostToDevice);
+	cudaMemcpy(device1.a_rows   , host.a_rows       , size              , cudaMemcpyHostToDevice);
+    cudaMemcpy(device1.a_cols   , host.a_cols       , size              , cudaMemcpyHostToDevice);
+#endif
 	//printf("GPU initialization passed.\n");
-	#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
+#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
 	cudaMalloc((void**)&device1.b		, size);
 	cudaMalloc((void**)&device2.b		, size);
 	cudaMalloc((void**)&device1.b_rows      , size);
@@ -185,15 +187,15 @@ void gpuInitialize(InitialData& id, DataArray& host, DataArray& device1, DataArr
     cudaMalloc((void**)&device1.b_cz       	, size);
 	cudaMalloc((void**)&device1.del_b       , size);
 	// Copy host to device
-    cudaMemcpy(device1.b            , host.b                , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device2.b            , host.b                , size              , cudaMemcpyHostToDevice);
-	cudaMemcpy(device1.b_rows       , host.b_rows           , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device1.b_cols       , host.b_cols           , size              , cudaMemcpyHostToDevice);
-	cudaMemcpy(device1.del_b        , host.del_b            , size              , cudaMemcpyHostToDevice);
-	#endif
+    cudaMemcpy(device1.b      , host.b          , size     , cudaMemcpyHostToDevice);
+    cudaMemcpy(device2.b      , host.b          , size     , cudaMemcpyHostToDevice);
+	cudaMemcpy(device1.b_rows , host.b_rows     , size     , cudaMemcpyHostToDevice);
+    cudaMemcpy(device1.b_cols , host.b_cols     , size     , cudaMemcpyHostToDevice);
+	cudaMemcpy(device1.del_b  , host.del_b      , size     , cudaMemcpyHostToDevice);
+#endif
 	CudaCheck();
 	//printf("GPU initialization passed.\n");
-	#if ( MODEL == KSMD || MODEL == KSCMD )
+#if ( MODEL == KSMD || MODEL == KSCMD )
 	cudaMalloc((void**)&device1.ecm         , size);
 	cudaMalloc((void**)&device2.ecm         , size);
 	cudaMalloc((void**)&device1.ecm_rows    , size);
@@ -209,26 +211,27 @@ void gpuInitialize(InitialData& id, DataArray& host, DataArray& device1, DataArr
     cudaMalloc((void**)&device1.ecm_cz      , size);
 	cudaMalloc((void**)&device1.del_ecm     , size);
 	//Copy host to device
-	cudaMemcpy(device1.ecm          , host.ecm              , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device2.ecm          , host.ecm              , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device1.ecm_rows     , host.ecm_rows         , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device1.ecm_cols     , host.ecm_cols         , size              , cudaMemcpyHostToDevice);
-    cudaMemcpy(device1.del_ecm      , host.del_ecm          , size              , cudaMemcpyHostToDevice);
-	#endif
+	cudaMemcpy(device1.ecm     , host.ecm     , size, cudaMemcpyHostToDevice);
+    cudaMemcpy(device2.ecm     , host.ecm     , size, cudaMemcpyHostToDevice);
+    cudaMemcpy(device1.ecm_rows, host.ecm_rows, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(device1.ecm_cols, host.ecm_cols, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(device1.del_ecm , host.del_ecm , size, cudaMemcpyHostToDevice);
+#endif
 	//printf("GPU initialization passed.\n");
 
-    cudaMalloc((void**)&device1.dt   	, sizeof(double));
+    cudaMalloc((void**)&device1.dt   	    , sizeof(double));
     cudaMalloc((void**)&device2.dt         	, sizeof(double));
     cudaMalloc((void**)&device1.d_max_block	, 256*sizeof(double));
-	cudaMemcpy(device1.dt           , host.dt               , sizeof(double)    , cudaMemcpyHostToDevice);
-    cudaMemcpy(device2.dt           , host.dt               , sizeof(double)    , cudaMemcpyHostToDevice);
-    cudaMemcpy(device1.d_max_block  , host.d_max_block      , 256*sizeof(double), cudaMemcpyHostToDevice);
+
+	cudaMemcpy(device1.dt           , host.dt           , sizeof(double)    , cudaMemcpyHostToDevice);
+    cudaMemcpy(device2.dt           , host.dt           , sizeof(double)    , cudaMemcpyHostToDevice);
+    cudaMemcpy(device1.d_max_block  , host.d_max_block  , 256*sizeof(double), cudaMemcpyHostToDevice);
 
 	CudaCheck();
 	//printf("GPU initialization passed.\n");
 
 	//copy data to constant memory on device
-	cudaMemcpyToSymbol(DX   , &id.dx     , sizeof(double), 0, cudaMemcpyHostToDevice);
+	cudaMemcpyToSymbol(DX   , &id.dx    , sizeof(double), 0, cudaMemcpyHostToDevice);
 	cudaMemcpyToSymbol(XMAX , &host.xmax, sizeof(int   ), 0, cudaMemcpyHostToDevice);
 	cudaMemcpyToSymbol(YMAX , &host.ymax, sizeof(int   ), 0, cudaMemcpyHostToDevice);
 	cudaMemcpyToSymbol(ZMAX , &host.zmax, sizeof(int   ), 0, cudaMemcpyHostToDevice);
@@ -249,38 +252,44 @@ void gpuInitialize(InitialData& id, DataArray& host, DataArray& device1, DataArr
 	printf("GPU initialization completed.\n");	
 }
 
+
+
 //compute time step for explicit method
 void gpuStep_explicit(DataArray& device1, DataArray& device2, InitialData& id, double chi_dx, double chi_ecm_dx, int iter)
 {
 	//Advection - explicit Lax-Wendroff with MUSCL Flux Limiter
-	#if ( MODEL == KSC || MODEL == TEST)
-	kernelAdv<<<blocks_adv, threads_adv>>>(device2.a, device1.a, device1.b  , device1.del_b  , device1.dt, id.chi, chi_dx);
+    #if ( MODEL == KSC || MODEL == TEST)
+	kernelAdv<<<blocks_adv, threads_adv>>>(device2.a, device1.a, 
+                                           device1.b  , device1.del_b  , device1.dt, id.chi, chi_dx);
 	kernelGrowA<<<blocks_adv, threads_adv>>>(device1.a, device2.a, device1.dt, id.s);
 	kernelGrowB<<<blocks_adv, threads_adv>>>(device2.b, device1.b, device1.a , device1.dt, id.r);
 	//swap
 	double *tempb=device2.b  ; device2.b=device1.b    ; device1.b=tempb;
-	#endif
+    #endif
 
-	#if ( MODEL == KSMD )
-	kernelAdv<<<blocks_adv, threads_adv>>>(device2.a, device1.a, device1.ecm, device1.del_ecm, device1.dt, id.chi_ecm, chi_ecm_dx);
+    #if ( MODEL == KSMD )
+	kernelAdv<<<blocks_adv, threads_adv>>>(device2.a, device1.a, device1.ecm, 
+                                           device1.del_ecm, device1.dt, id.chi_ecm, chi_ecm_dx);
 	kernelGrowA<<<blocks_adv, threads_adv>>>(device1.a, device2.a, device1.dt, id.s);
-	#endif
+    #endif
 
-	#if ( MODEL == KSCMD )
-	kernelAdv<<<blocks_adv, threads_adv>>>(device2.a, device1.a, device1.b  , device1.del_b  , device1.dt, id.chi, chi_dx);
-	kernelAdv<<<blocks_adv, threads_adv>>>(device1.a, device2.a, device1.ecm, device1.del_ecm, device1.dt, id.chi_ecm, chi_ecm_dx);
+    #if ( MODEL == KSCMD )
+	kernelAdv<<<blocks_adv, threads_adv>>>(device2.a, device1.a, device1.b, 
+                                           device1.del_b  , device1.dt, id.chi, chi_dx);
+	kernelAdv<<<blocks_adv, threads_adv>>>(device1.a, device2.a, device1.ecm, 
+                                           device1.del_ecm, device1.dt, id.chi_ecm, chi_ecm_dx);
     kernelGrowA<<<blocks_adv, threads_adv>>>(device2.a, device1.a, device1.dt, id.s);
     kernelGrowB<<<blocks_adv, threads_adv>>>(device2.b, device1.b, device1.a , device1.dt, id.r);
 	//swap
     double *tempa=device2.a  ; device2.a=device1.a    ; device1.a=tempa;
     double *tempb=device2.b  ; device2.b=device1.b    ; device1.b=tempb;
-	#endif
+    #endif
 
-	#if ( MODEL == FK )
+    #if ( MODEL == FK )
 	kernelGrowA<<<blocks_adv, threads_adv>>>(device2.a, device1.a, device1.dt, id.s);
 	//swap
 	double *tempa=device2.a  ; device2.a=device1.a    ; device1.a=tempa;
-	#endif
+    #endif
 	
 
 	//Update Neumann B.C.
@@ -291,36 +300,38 @@ void gpuStep_explicit(DataArray& device1, DataArray& device2, InitialData& id, d
     kernelBoundaryEdgeY<<<blocks_edge_y, threads_edge>>>(device1.a);
     kernelBoundaryEdgeZ<<<blocks_edge_z, threads_edge>>>(device1.a);
 
-	#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
+    #if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
     kernelBoundaryX      <<<blocks_boundary_x, threads_boundary>>>(device1.b);
     kernelBoundaryY      <<<blocks_boundary_y, threads_boundary>>>(device1.b);
     kernelBoundaryZ      <<<blocks_boundary_z, threads_boundary>>>(device1.b);
     kernelBoundaryEdgeX<<<blocks_edge_x, threads_edge>>>(device1.b);
     kernelBoundaryEdgeY<<<blocks_edge_y, threads_edge>>>(device1.b);
     kernelBoundaryEdgeZ<<<blocks_edge_z, threads_edge>>>(device1.b);
-	#endif
+    #endif
 
 	//Stability
-	#if   ( MODEL == KSCMD )
+    #if   ( MODEL == KSCMD )
 	kernelStability<<<dimGrid, dimBlock>>>(device1.del_b, device1.del_ecm, device1.d_max_block);
-	final_kernelStability<<<1, dimBlock>>>(device1.d_max_block, device1.dt, device2.dt,256, iter);//, id.da, id.db, id.dc);
-	#elif ( MODEL == KSMD )
+	final_kernelStability<<<1, dimBlock>>>(device1.d_max_block, device1.dt, device2.dt,256, iter);
+    //, id.da, id.db, id.dc);
+    #elif ( MODEL == KSMD )
     double *p;
     kernelStability<<<dimGrid, dimBlock>>>(p            , device1.del_ecm, device1.d_max_block);
-	final_kernelStability<<<1, dimBlock>>>(device1.d_max_block, device1.dt, device2.dt,256, iter);//, id.da, 0, id.dc);
-	#elif ( MODEL == KSC || MODEL == TEST )
+	final_kernelStability<<<1, dimBlock>>>(device1.d_max_block, device1.dt, device2.dt,256, iter);
+    //, id.da, 0, id.dc);
+    #elif ( MODEL == KSC || MODEL == TEST )
 	double *p;
 	kernelStability<<<dimGrid, dimBlock>>>(device1.del_b, p              , device1.d_max_block);
-	final_kernelStability<<<1, dimBlock>>>(device1.d_max_block, device1.dt, device2.dt,256, iter);//, id.da, id.db, 0);
-	#endif
+	final_kernelStability<<<1, dimBlock>>>(device1.d_max_block, device1.dt, device2.dt,256, iter);
+    //, id.da, id.db, 0);
+    #endif
 
 	//swap
 	double *tempdt=device2.dt; device2.dt=device1.dt; device1.dt=tempdt;
 	CudaCheck(); //because of asynchronous execution, there will be several steps before it can return an error, if any
-
 }
 
-
+/*
 void test_CD(DataArray& device1, DataArray& device2, InitialData& id)
 {
     kernelDiffusion<<<blocks_laplace, threads_laplace>>>(device1.a, device2.a, id.dt_imp, id.da);
@@ -335,36 +346,50 @@ void test_CD(DataArray& device1, DataArray& device2, InitialData& id)
     kernelBoundaryEdgeZ<<<blocks_edge_z, threads_edge>>>(device1.a);
     CudaCheck();
 }
+*/
+
+
 
 
 //compute time step for implicit method
 void gpuStep_implicit(DataArray& device1, DataArray& device2, double cfl_a, double cfl_b, double cfl_c)
 {
 	//Diffusion step for cell density
-	fillTridiagonals_x<<<blocksDG_x,threadsDG_x>>>(device1.a_ax, device1.a_bx, device1.a_cx, device1.a, device1.a_rows, 2, cfl_a);
-	fillTridiagonals_y<<<blocksDG_y,threadsDG_y>>>(device1.a_ay, device1.a_by, device1.a_cy, device1.a, device1.a_rows, device1.a_cols, 2, cfl_a);
+	fillTridiagonals_x<<<blocksDG_x,threadsDG_x>>>(device1.a_ax, device1.a_bx, device1.a_cx, 
+                                                   device1.a, device1.a_rows, 2, cfl_a);
+	fillTridiagonals_y<<<blocksDG_y,threadsDG_y>>>(device1.a_ay, device1.a_by, device1.a_cy, 
+                                                   device1.a, device1.a_rows, device1.a_cols, 2, cfl_a);
 	transpose_XYZ_to_ZXY<<<grid_xyz2zxy, threads_xyz2zxy>>>(device2.a,device1.a);
-	fillTridiagonals_z_transp<<<blocksDG_z, threadsDG_z>>>(device1.a_az, device1.a_bz, device1.a_cz, device1.a_cols, device2.a, 2, cfl_a);
+	fillTridiagonals_z_transp<<<blocksDG_z, threadsDG_z>>>(device1.a_az, device1.a_bz, device1.a_cz, 
+                                                           device1.a_cols, device2.a, 2, cfl_a);
 	transpose_ZXY_to_XYZ<<<grid_zxy2xyz, threads_zxy2xyz>>>(device1.a,device2.a);
 //	getLastCudaError("cell:GPU_transpose_ZXY_to_XYZ execution failed\n");
 
-	#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
+    #if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
 	//Diffusion step for signal density
-	fillTridiagonals_x<<<blocksDG_x,threadsDG_x>>>(device1.b_ax, device1.b_bx, device1.b_cx, device1.b, device1.b_rows, 2, cfl_b);
-    fillTridiagonals_y<<<blocksDG_y,threadsDG_y>>>(device1.b_ay, device1.b_by, device1.b_cy, device1.b, device1.b_rows, device1.b_cols, 2, cfl_b);
+	fillTridiagonals_x<<<blocksDG_x,threadsDG_x>>>(device1.b_ax, device1.b_bx, device1.b_cx, 
+                                                   device1.b, device1.b_rows, 2, cfl_b);
+    fillTridiagonals_y<<<blocksDG_y,threadsDG_y>>>(device1.b_ay, device1.b_by, device1.b_cy, 
+                                                   device1.b, device1.b_rows, device1.b_cols, 2, cfl_b);
     transpose_XYZ_to_ZXY<<<grid_xyz2zxy, threads_xyz2zxy>>>(device2.b,device1.b);
-    fillTridiagonals_z_transp<<<blocksDG_z, threadsDG_z>>>(device1.b_az, device1.b_bz, device1.b_cz, device1.b_cols, device2.b, 2, cfl_b);
+    fillTridiagonals_z_transp<<<blocksDG_z, threadsDG_z>>>(device1.b_az, device1.b_bz, device1.b_cz, 
+                                                           device1.b_cols, device2.b, 2, cfl_b);
     transpose_ZXY_to_XYZ<<<grid_zxy2xyz, threads_zxy2xyz>>>(device1.b,device2.b);
-	#endif
+    #endif
 
 	//Diffusion step for ECM density
-	#if ( MODEL == KSMD || MODEL == KSCMD)
-    fillTridiagonals_x<<<blocksDG_x,threadsDG_x>>>(device1.ecm_ax, device1.ecm_bx, device1.ecm_cx, device1.ecm, device1.ecm_rows, 2, cfl_c);
-    fillTridiagonals_y<<<blocksDG_y,threadsDG_y>>>(device1.ecm_ay, device1.ecm_by, device1.ecm_cy, device1.ecm, device1.ecm_rows, device1.ecm_cols, 2, cfl_c);
+    #if ( MODEL == KSMD || MODEL == KSCMD)
+    fillTridiagonals_x<<<blocksDG_x,threadsDG_x>>>(device1.ecm_ax, device1.ecm_bx, device1.ecm_cx, 
+                                                   device1.ecm, device1.ecm_rows, 2, cfl_c);
+    fillTridiagonals_y<<<blocksDG_y,threadsDG_y>>>(device1.ecm_ay, device1.ecm_by, device1.ecm_cy, 
+                                                   device1.ecm, device1.ecm_rows, device1.ecm_cols, 2, 
+                                                   cfl_c);
     transpose_XYZ_to_ZXY<<<grid_xyz2zxy, threads_xyz2zxy>>>(device2.ecm,device1.ecm);
-    fillTridiagonals_z_transp<<<blocksDG_z, threadsDG_z>>>(device1.ecm_az, device1.ecm_bz, device1.ecm_cz, device1.ecm_cols, device2.ecm, 2, cfl_c);
+    fillTridiagonals_z_transp<<<blocksDG_z, threadsDG_z>>>(device1.ecm_az, device1.ecm_bz, 
+                                                           device1.ecm_cz, device1.ecm_cols, 
+                                                           device2.ecm, 2, cfl_c);
     transpose_ZXY_to_XYZ<<<grid_zxy2xyz, threads_zxy2xyz>>>(device1.ecm,device2.ecm);
-	#endif
+    #endif
 
 	//Updated Neumann B.C.
 	kernelBoundaryX<<<blocks_boundary_x, threads_boundary>>>(device1.a);
@@ -374,40 +399,42 @@ void gpuStep_implicit(DataArray& device1, DataArray& device2, double cfl_a, doub
     kernelBoundaryEdgeY<<<blocks_edge_y, threads_edge>>>(device1.a);
     kernelBoundaryEdgeZ<<<blocks_edge_z, threads_edge>>>(device1.a);
 
-	#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
+#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
     kernelBoundaryX<<<blocks_boundary_x, threads_boundary>>>(device1.b);
     kernelBoundaryY<<<blocks_boundary_y, threads_boundary>>>(device1.b);
     kernelBoundaryZ<<<blocks_boundary_z, threads_boundary>>>(device1.b);
     kernelBoundaryEdgeX<<<blocks_edge_x, threads_edge>>>(device1.b);
     kernelBoundaryEdgeY<<<blocks_edge_y, threads_edge>>>(device1.b);
     kernelBoundaryEdgeZ<<<blocks_edge_z, threads_edge>>>(device1.b);
-	#endif
+#endif
 
 	//Update Neumann, Dirichlet BC for ECM
-	#if ( MODEL == KSMD || MODEL == KSCMD)
+#if ( MODEL == KSMD || MODEL == KSCMD)
 	kernelBoundaryX_Dirichlet<<<blocks_boundary_x, threads_boundary>>>(device1.ecm);
     kernelBoundaryY_Dirichlet<<<blocks_boundary_y, threads_boundary>>>(device1.ecm);
     kernelBoundaryZ_Mix<<<blocks_boundary_z, threads_boundary>>>(device1.ecm);//device1.del_b);
     kernelBoundaryEdgeX_Mix<<<blocks_edge_x, threads_edge>>>(device1.ecm);
     kernelBoundaryEdgeY_Mix<<<blocks_edge_y, threads_edge>>>(device1.ecm);
     kernelBoundaryEdgeZ_Mix<<<blocks_edge_z, threads_edge>>>(device1.ecm);
-	#endif
-
-    //No need for swapping between device1 and device2
+#endif
+       	//No need for swapping between device1 and device2
 	CudaCheck(); //because of asynchronous execution, there will be several steps before it can return an error, if any
 
 }
 
 
+
 void ExportDT(DataArray& host, DataArray& device1)
 {
-    cudaMemcpy(host.new_dt    , device1.dt    , sizeof(double), cudaMemcpyDeviceToHost);
+    cudaMemcpy(host.new_dt, device1.dt, sizeof(double), cudaMemcpyDeviceToHost);
     CudaCheck();
 }
 
+
+
 void gpuClose(DataArray& device1, DataArray& device2)
 {
-	#if ( MODEL == FK || MODEL == KSC || MODEL == KSMD || MODEL == KSCMD || MODEL == TEST)
+    #if ( MODEL == FK || MODEL == KSC || MODEL == KSMD || MODEL == KSCMD || MODEL == TEST)
     cudaFree(device1.a);
     cudaFree(device2.a);
 	cudaFree(device1.a_rows);
@@ -421,9 +448,9 @@ void gpuClose(DataArray& device1, DataArray& device2)
     cudaFree(device1.a_cx);
     cudaFree(device1.a_cy);
     cudaFree(device1.a_cz);
-	#endif
+    #endif
 
-	#if ( MODEL == KSC || MODEL == KSCMD )
+    #if ( MODEL == KSC || MODEL == KSCMD )
     cudaFree(device1.b);
     cudaFree(device2.b);
 	cudaFree(device1.b_rows);
@@ -438,9 +465,9 @@ void gpuClose(DataArray& device1, DataArray& device2)
     cudaFree(device1.b_cy);
     cudaFree(device1.b_cz);
 	cudaFree(device1.del_b);
-	#endif
+    #endif
 
-	#if ( MODEL == KSMD || MODEL == KSCMD )
+    #if ( MODEL == KSMD || MODEL == KSCMD )
 	cudaFree(device1.ecm);
     cudaFree(device2.ecm);
 	cudaFree(device1.ecm_rows);
@@ -454,79 +481,71 @@ void gpuClose(DataArray& device1, DataArray& device2)
     cudaFree(device1.ecm_cx);
     cudaFree(device1.ecm_cy);
     cudaFree(device1.ecm_cz);
-	#endif
+    #endif
 
-	#if (MODEL == KSC || MODEL == KSMD || MODEL == KSCMD)
+    #if (MODEL == KSC || MODEL == KSMD || MODEL == KSCMD)
     cudaFree(device1.dt);
     cudaFree(device2.dt);
     cudaFree(device1.d_max_block);
-	#endif
+    #endif
 
 //	cudaDeviceReset();
-
 	//sleep(5);
 }
 
 //copy data from device to host and write it to a binary file
-void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c, DataArray& host, DataArray& device1, int l, int printout)
+void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c, DataArray& host, DataArray& device1, float l, int printout)
 {
     cudaMemcpy(host.a_intm   , device1.a    , total*sizeof(double), cudaMemcpyDeviceToHost);
-	#if ( MODEL == KSC  || MODEL == KSCMD || MODEL == TEST )
+    #if ( MODEL == KSC  || MODEL == KSCMD || MODEL == TEST )
     cudaMemcpy(host.b_intm   , device1.b    , total*sizeof(double), cudaMemcpyDeviceToHost);
-	#endif
-	#if ( MODEL == KSMD || MODEL == KSCMD )
-	cudaMemcpy(host.ecm_intm , device1.ecm  , total*sizeof(double), cudaMemcpyDeviceToHost);
-	#endif
+    #endif
+    #if ( MODEL == KSMD || MODEL == KSCMD )
+    cudaMemcpy(host.ecm_intm , device1.ecm  , total*sizeof(double), cudaMemcpyDeviceToHost);
+    #endif
     CudaCheck();
 
 #ifdef SAVE_DATA
     //create a file
     char filename_a[4096];
-	#if   ( MODEL == FK   )
-	const char* name_m = "fk";
-	#elif ( MODEL == TEST )
-	const char* name_m = "test";
-	#elif ( MODEL == KSC  )
-	const char* name_m = "ksc";
-	#elif ( MODEL == KSMD )
-	const char* name_m = "ksmd";
-	#elif ( MODEL == KSCMD )
-	const char* name_m = "kscmd";
-	#endif
+    #if   ( MODEL == FK   )
+    const char* name_m = "fk";
+    #elif ( MODEL == TEST )
+    const char* name_m = "test";
+    #elif ( MODEL == KSC  )
+    const char* name_m = "ksc";
+    #elif ( MODEL == KSMD )
+    const char* name_m = "ksmd";
+    #elif ( MODEL == KSCMD )
+    const char* name_m = "kscmd";
+    #endif
 
-	FILE *fa;
-	sprintf(filename_a, "%s_%s_%d.raw", name_a, name_m, l);
-	fa = fopen(filename_a, "wb");
-	if (fa==0) { printf("  error creating %s\n", filename_a); return; }
-	//write data
-    fwrite(host.a_intm  , total * sizeof(double), 1, fa);
-	fclose(fa);
+    sprintf(filename_a, "%s_%s_%f.vtk", name_a, name_m, l);
+    VTKsave(filename_a, host.xmax, host.ymax, host.zmax, host.a_intm);
 
-	#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
-	char filename_b[4096];
-	FILE *fb;
-    sprintf(filename_b, "%s_%s_%d.raw", name_b, name_m, l);
-    fb = fopen(filename_b, "wb");
-    if (fb==0) { printf("  error creating %s\n", filename_b); return; }
-    //write data
-    fwrite(host.b_intm  , total * sizeof(double), 1, fb);
-    fclose(fb);
-	#endif
+    #if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
+    char filename_b[4096];
+    sprintf(filename_b, "%s_%s_%f.vtk", name_b, name_m, l);
+    VTKsave(filename_b, host.xmax, host.ymax, host.zmax, host.b_intm);
+    #endif
 
-	#if ( MODEL == KSMD || MODEL == KSCMD)
-	char filename_c[4096];
-	FILE *fc;
-	sprintf(filename_c, "%s_%d.raw", name_c, l);
-	fc = fopen(filename_c, "wb");
-	if (fc==0) { printf("  error creating %s\n", filename_c); return; }
-	fwrite(host.ecm_intm, total * sizeof(double), 1, fc);
-	fclose(fc);
-	#endif
+    #if ( MODEL == KSMD || MODEL == KSCMD)
+    char filename_c[4096];
+//  FILE *fc;
+    sprintf(filename_c, "%s_%f.vtk", name_c, l);
+    VTKsave(filename_c, host.xmax, host.ymax, host.zmax, host.c_intm);
+/*
+    fc = fopen(filename_c, "wb");
+    if (fc==0) { printf("  error creating %s\n", filename_c); return; }
+    fwrite(host.ecm_intm, total * sizeof(double), 1, fc);
+    fclose(fc);
+*/
+    #endif
 #endif
 
 /*
-	//create a file
-	const char* name_as="a_slice_ks";
+    //create a file
+    const char* name_as="a_slice_ks";
         const char* name_bs="b_slice_ks";
         char filename_as[4096];
         char filename_bs[4096];
@@ -540,7 +559,7 @@ void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c
         if (fbs==0) { printf("  error creating %s\n", filename_bs); return; }
 
 
-	//Export a slice
+    //Export a slice
         int cs=0;
         for(int k=0; k<host.zmax; k++){
                 for(int j=0; j<host.ymax; j++){
@@ -551,8 +570,8 @@ void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c
                                 {
                                         //host.a_slice[cs] = host.a_intm[id];
                                         //host.b_slice[cs] = host.b_intm[id];
-					fprintf(fas,"%d	%1.20f\n", cs, host.a_intm[id]);
-					fprintf(fbs,"%d	%1.20f\n", cs, host.b_intm[id]);
+                    fprintf(fas,"%d %1.20f\n", cs, host.a_intm[id]);
+                    fprintf(fbs,"%d %1.20f\n", cs, host.b_intm[id]);
                                         cs++;
                                 }
                         }
@@ -562,8 +581,8 @@ void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c
         fclose(fas);
         fclose(fbs);
 */
-	if (printout) {
-		double* max_host_a = max_element(host.a_intm, host.a_intm+int(zsize*host.zmax));
+    if (printout) {
+        double* max_host_a = max_element(host.a_intm, host.a_intm+int(zsize*host.zmax));
         double* min_host_a = min_element(host.a_intm, host.a_intm+int(zsize*host.zmax));
         printf("max_a = %1.2e\nmin_a = %1.2e\n", *max_host_a, *min_host_a);
 
@@ -578,11 +597,10 @@ void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c
             printf("\n");
         }
 
-		#if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
-		double* max_host_b = max_element(host.b_intm, host.b_intm+int(zsize*host.zmax));
+        #if ( MODEL == KSC || MODEL == KSCMD || MODEL == TEST)
+        double* max_host_b = max_element(host.b_intm, host.b_intm+int(zsize*host.zmax));
         double* min_host_b = min_element(host.b_intm, host.b_intm+int(zsize*host.zmax));
         printf("max_b = %1.2e\nmin_b = %1.2e\n", *max_host_b, *min_host_b);
-
         for (int k=2.0*host.zmax/5.0-1; k<2.0*host.zmax/5.0+2; k++) {
         for (int j=2.0*host.ymax/5.0-1; j<2.0*host.ymax/5.0+4; j++) {
         for (int i=2.0*host.xmax/5.0-1; i<2.0*host.xmax/5.0+4; i++) {
@@ -594,14 +612,14 @@ void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c
             printf("\n");
         }
 
-		#endif
+        #endif
 
-		#if ( MODEL == KSMD || MODEL == KSCMD)
-		double* max_host_ecm = max_element(host.ecm_intm, host.ecm_intm+int(zsize*host.zmax));
+        #if ( MODEL == KSMD || MODEL == KSCMD)
+        double* max_host_ecm = max_element(host.ecm_intm, host.ecm_intm+int(zsize*host.zmax));
         double* min_host_ecm = min_element(host.ecm_intm, host.ecm_intm+int(zsize*host.zmax));
         printf("max_ecm = %1.2e\nmin_ecm = %1.2e\n", *max_host_ecm, *min_host_ecm);
 
-		for (int k=2.0*host.zmax/5.0-1; k<2.0*host.zmax/5.0+2; k++) {
+        for (int k=2.0*host.zmax/5.0-1; k<2.0*host.zmax/5.0+2; k++) {
         for (int j=2.0*host.ymax/5.0-1; j<2.0*host.ymax/5.0+4; j++) {
         for (int i=2.0*host.xmax/5.0-1; i<2.0*host.xmax/5.0+4; i++) {
             int id = i + host.xmax*(j + k*host.ymax);
@@ -611,9 +629,10 @@ void ExportCheckpoint(const char* name_a, const char* name_b, const char* name_c
         }
             printf("\n");
         }
-		#endif
+        #endif
     }
 }
+
 
 void ExportIter(DataArray& host, DataArray& device1)
 {
@@ -627,7 +646,6 @@ void ExportIter(DataArray& host, DataArray& device1)
 }
 
 
-
 /*
 void gpuKa(InitialData& id)
 {
@@ -635,4 +653,5 @@ void gpuKa(InitialData& id)
 }
 */
 //free device memory
+
 
