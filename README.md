@@ -2,7 +2,7 @@
 
 Repository for calibration, simulation, and validity assessment of a
 Hybrid Discrete-Continuum model of cancer growth with applications in
-3D cancer cell cultures (paper).
+3D cancer cell cultures ([paper](https://www.biorxiv.org/content/10.1101/2021.11.16.468856v2)).
 
 ### Table of Contents
 - **[Code and data](#code-and-data)**<br>
@@ -219,3 +219,4 @@ For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill
 
 ## Citing
 If you intend to use this code in your publications, please cite:
+>Dimitriou, N. M., Flores-Torres, S., Kinsella, J. M., & Mitsis, G. D. (2021). Quantifying the Morphology and Mechanisms of Cancer Progression in 3D in-vitro environments: Integrating Experiments, Multiscale Models, and Spatial Validation. BioRxiv. https://doi.org/10.1101/2021.11.16.468856
