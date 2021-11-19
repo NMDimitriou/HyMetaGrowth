@@ -159,7 +159,8 @@ set the correct number of GPUs that will be used in the calibration.
 ### Visualization of parameter posterior distributions
 1. Go to the `Visualization` directory
 
-2. Open the `plot_samples.R` file and modify the fname according the file you want
+2. Open the `plot_samples.R` file (thanks to [Π4U package](https://github.com/cselab/pi4u))
+and modify the fname according the file you want
 to open and plot. Then run script in R. The files produced by the TMCMC that have
 the pattern
 `curgen*.txt` contain the posterior distributions (PDFs) of the candidate
