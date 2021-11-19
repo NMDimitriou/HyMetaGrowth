@@ -61,18 +61,10 @@ The `Calibration_Continuum` directory contains the following subdirectories.
 
 - TMCMC: Contains the code of TMCMC algorithm.
 
-- Simulations: Contains the code of the model. To perfrom calibration, copy the `sample`
-  binary file from the `TMCMC/` directory here.
-
-    - model: Contains the source code for the simulation of the continuum model.
-      To compile the code, run make. The `doall.sh` script is called by the
-      TMCMC code. To modify the total number of GPUs used for your study, open this
-      script and change the last argument.
-
-
-- Visualization: Contains the `plot_data.R` script that takes `curgen*.txt` files
-of posterior PDFs candidates of each generation and plots the marginal and joint
-parameter posterior distributions.
+- model: Contains the source code for the simulation of the continuum model.
+  To compile the code, run make. The `doall.sh` script is called by the
+  TMCMC code. To modify the total number of GPUs used for your study, open this
+  script and change the last argument.
 
 ### - Hybrid
 Here we simulate the hybrid model. The `Hybrid` directory contains the source
