@@ -31,7 +31,7 @@ Hybrid Discrete-Continuum model of cancer growth with applications in
 ## Prerequisites
   - [CUDA version ≥ 10](https://developer.nvidia.com/cuda-downloads)
   - [Π4U package](https://github.com/cselab/pi4u)
-  - NVidia GPU with memory ≥ 12 GB (otherwise the resolution of the simulation
+  - NVidia GPU with memory ≥ 12 GB (otherwise the grid size of the simulations
     should be reduced)
 
 ## Introduction
@@ -83,6 +83,22 @@ This directory contains Matlab and R scripts that perform spatial analysis betwe
 simulated and experimental data.
 
 ## Instructions
+### Converting 3D cellular coordinates to spatial density
+1. Go to the `Points2Density` directory, and open the Matlab script
+`points2density.m`. The script initially scales the space (default 2500x2500x917 \mu m)
+to the approximate cell size (default dx=15 \mu m). Then, it interpolates the
+scaled space resulting in 480x480x176 grid size that will be introduced to the
+simulator.
+
+2. Specify the directory and common prefix of the files that the coordinated of the cells.
+The default directory and files can be found in the `res_coord_scaled` directory.
+You can run the script with the default arguments and it will produce the density
+profiles of the corresponding coordinates. The output can be found in the
+`Corrected_Density_double_precision`.
+
+3. Copy the output files into the `Calibration_Continuum/IC` to proceed
+with the next step.
+
 ### Test simulation on the continuum level
 1. **Code compilation.** Go to `Calibration_Continuum/model`.
  Then run `make`.
@@ -122,8 +138,7 @@ the shared memory, and the `main` that executes the simulation. The `main_parent
 
   the <common prefix of the ICs/data files> is the same as the argument in `./main_parent` input. In this setup each simulation takes only one GPU, and this argument should be set to 1.
 
-  Once you have set the `doall_test.sh` you can run it by typing `./doall_test.sh`
-in the terminal (make sure that you have execution priviledges before running it).
+  Once you have set the `doall_test.sh` you can run it by typing `./doall_test.sh` in the terminal (make sure that you have execution priviledges before running it).
 
 ### Saving the simulation output
 To enable saving of the
@@ -177,9 +192,7 @@ found by the TMCMC in a `best_params_< name of TMCMC file >.txt` file.
 
    `./main <path/to/parameter_file> <common prefix of data (ICs/experiments)>`
 
-   The output of the simulation are the files with the coordinates of the cells
-and the files containing the number of cells in the corresponding time-points
-(the default is day 0, 1, 2, ... 14).
+   The output of the simulation are the files with the coordinates of the cells and the files containing the number of cells in the corresponding time-points (the default is day 0, 1, 2, ... 14).
 
 ### Spatial Analysis
 1. To plot the centroids of both experiments and simulations use the `plot_centroids.m`

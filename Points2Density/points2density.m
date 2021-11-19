@@ -5,8 +5,8 @@
 clear; clc; close all;
 
 tp    = {'D0' 'D2' 'D5' 'D7' 'D9' 'D12' 'D14'};
-group = 'A*E*.txt';
-gname = 'AE';
+group = {'A*E*.txt'};
+gname = {'AE'};
 
 % Series 1
 %group = {'A*C*.txt','A*E*.txt','B*E*.txt','B*N*.txt','B*W*.txt','F*W*.txt'};
@@ -36,8 +36,8 @@ lt    = length(time);
 % For grid points 480x480x176 multiples of 16 (2500x2500x917um space dimensions)
 %dsxy = 5.208333333333333; % downscale parameter for xy-plane
 %dsz  = 917/176; % downscale parameter for z-dimension
-dx=15;
-sz = ceil([2500/dx,2500/dx,917/dx]);
+dx=15; % the approximate size of the cell in mu M
+sz = ceil([2500/dx,2500/dx,917/dx]); % scale to the cell size
 
 % For the interpolation
 x=linspace(0,2.5,sz(1));
@@ -56,8 +56,7 @@ disp('Importing coordinates...')
 for i=1:lg
     for j=1:lt
        
-        %samp{i,j}=dir(['res_coord_scaled/' tp{j} '/' group{i}]);
-		samp{i,j}=dir(['res_coord_series_2_scaled/' tp{j} '/' group{i}]);
+        samp{i,j}=dir(['res_coord_scaled/' tp{j} '/' group{i}]);
         coord.(gname{i}).(tp{j})=readmatrix([samp{i,j}.folder '/' samp{i,j}.name]);
         count.(gname{i}).(tp{j})=length(coord.(gname{i}).(tp{j})(:,1));
         % Scale them in order for cells to be points
@@ -106,10 +105,6 @@ for i=1:lg
 	'corr_dens_' gname{i} '_' tp{j} '.bin'],'w'); 
         fwrite(fileid,PV{i,j},'double');
         fclose(fileid);
-
-%	fileid = fopen(['Surrogate_density_double/dens_surr_' gname{i} '_' tp{j} '.bin'],'w');
-%	fwrite(fileid,dens_rsc.(gname{i}).(tp{j}),'double');
-%        fclose(fileid);
     end
 end
 
