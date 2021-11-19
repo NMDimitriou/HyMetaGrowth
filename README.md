@@ -114,18 +114,13 @@ the shared memory, and the `main` that executes the simulation. The `main_parent
 
   `./main_parent <start or stop> <directory of the ICs and experimental data>  <common prefix of the ICs/data files>`
 
-  The accepted filename format for the ICs and experimental data files is
-< common prefix >_D#.bin (for example AN_D0.bin for data at day 0, AN_D2.bin
-for data at day 2 etc).
+  The accepted filename format for the ICs and experimental data files is < common prefix >_D#.bin (for example AN_D0.bin for data at day 0, AN_D2.bin for data at day 2 etc).
 
-  Once the ICs and experimental data are loaded to the shared memory, the `./main`
-file runs the simulation. The input arguments for the `./main` file are the following
+  Once the ICs and experimental data are loaded to the shared memory, the `./main` file runs the simulation. The input arguments for the `./main` file are the following
 
-  `./main <parameter file such as params_test.txt>
-  <common perefix of the ICs/data files>  <number of GPUs (must be 1)>`
+  `./main <parameter file such as params_test.txt> <common perefix of the ICs/data files>  <number of GPUs (must be 1)>`
 
-  the <common prefix of the ICs/data files> is the same as the argument in
-`./main_parent` input. In this setup each simulation takes only one GPU, and this argument should be set to 1.
+  the <common prefix of the ICs/data files> is the same as the argument in `./main_parent` input. In this setup each simulation takes only one GPU, and this argument should be set to 1.
 
   Once you have set the `doall_test.sh` you can run it by typing `./doall_test.sh`
 in the terminal (make sure that you have execution priviledges before running it).
