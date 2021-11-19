@@ -9,7 +9,9 @@ Hybrid Discrete-Continuum model of cancer growth with applications in
 
 - The data associated with this study can be found on the [FigShare repository](https://figshare.com/projects/3D-GROWTH-MDA-MB-231-SERIES-12/118989).
 
-- A presentation related to the numerical methods and their implementation in GPU code can be foumd [here](https://github.com/NMDimitriou/HyMetaGrowth/blob/main/numerical_methods_implementation_gpus.pdf)
+- For information on the usage of the code have a look at the [README file](https://github.com/NMDimitriou/HyMetaGrowth/blob/main/README.md).
+
+- A presentation related to the numerical methods and their implementation in GPU code can be found [here](https://github.com/NMDimitriou/HyMetaGrowth/blob/main/numerical_methods_implementation_gpus.pdf).
 
 - Details on the data processing and segmentation pipeline can be found [here](https://www.biorxiv.org/content/10.1101/2021.07.29.454312v1).
 
