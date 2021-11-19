@@ -10,6 +10,7 @@ Hybrid Discrete-Continuum model of cancer growth with applications in
 - **[Introduction](#introduction)**<br>
 - **[Structure of repository](#structure-of-repository)**<br>
 - **[Instructions](#instructions)**<br>
+  - **[Converting 3D cellular coordinates to spatial density](#converting-3D-cellular-coordinates-to-spatial-density)**<br>
   - **[Test simulation on the continuum level](#Test-simulation-on-the-continuum-level)**<br>
   - **[Saving the simulation output](#saving-the-simulation-output)**<br>
   - **[Calibration on the continuum level](#calibration-on-the-continuum-level)**<br>
@@ -85,8 +86,8 @@ simulated and experimental data.
 ## Instructions
 ### Converting 3D cellular coordinates to spatial density
 1. Go to the `Points2Density` directory, and open the Matlab script
-`points2density.m`. The script initially scales the space (default 2500x2500x917 \mu m)
-to the approximate cell size (default dx=15 \mu m). Then, it interpolates the
+`points2density.m`. The script initially scales the space (default 2500x2500x917 μm)
+to the approximate cell size (default dx=15 μm). Then, it interpolates the
 scaled space resulting in 480x480x176 grid size that will be introduced to the
 simulator.
 
@@ -152,17 +153,17 @@ to the `simulate.cu` file.
 Go to the TMCMC directory and compile the code by running `make`.
 Then, copy the produced `sample` file from the `TMCMC` directory one directory above (ie `Calibration_Continuum`).
 
-3. **Optimizations.** Go to `Simulations/model` directory. In the
+3. **Optimizations.** Go to `Calibration_Continuum/model` directory. In the
 `Makefile` comment the lines `SIMU_OPTION += -DSAVE_DATA` and
 `SIMU_OPTION += -DNRMSE` to make the simulation faster. Compile the code by
-running `make`.
+running `make`. You can plot the resulted density in [Paraview](https://www.paraview.org/).
 
 4. The `doall.sh` file will be called by the TMCMC algorithm. This file
 runs the simulation. Make sure that the `./main` command (in the `doall.sh`)
 file has the correct arguments (see previous chapter). Also, make sure to
 set the correct number of GPUs that will be used in the calibration.
 
-5. Go to `Simulations` directory. To run the calibration in one GPU, simply type
+5. Go to `Calibration_Continuum` directory. To run the calibration in one GPU, simply type
 
    `./sample`
 
@@ -181,7 +182,7 @@ the pattern
 `curgen*.txt` contain the posterior distributions (PDFs) of the candidate
 model parameters. The resulted plots are saved in the directory of
 the `curgen*.txt` files. The `plot_data.R` script, also, saves the best parameters
-found by the TMCMC in a `best_params_< name of TMCMC file >.txt` file.
+found by the TMCMC in a `best_params_<name of TMCMC file>.txt` file.
 
 ### Simulation of the Hybrid model
 1. Go to the `Hybrid` directory.
