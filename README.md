@@ -67,9 +67,8 @@ simulated and experimental data.
 
 ## Instructions
 ### Test simulation on the continuum level
-1. Go to `Calibration_Continuum/model`. To enable saving the
-simulation results open the `Makefile` and uncomment the the line
-`SIMU_OPTION += -DSAVE_DATA`. Then run `make`.
+1. **Code compilation.** Go to `Calibration_Continuum/model`.
+ Then run `make`.
 
 2. Include the model parameters in the `params_test.txt` file.
 Note that the model takes 5 parameters (see the mathematical formulation in
@@ -93,7 +92,7 @@ the `doall_test.sh` file. This file executes 3 files; the `main_parent` file
 is responsible for loading and unloading the ICs and experimental data to
 the shared memory, and the `main` that executes the simulation. The `main_parent` file takes the following input format
 
-  ./main_parent < start or stop >   < directory of the ICs and experimental data >    < common prefix of the ICs/data files >
+  `./main_parent <start or stop> <directory of the ICs and experimental data>  <common prefix of the ICs/data files>`
 
   The accepted filename format for the ICs and experimental data files is
 < common prefix >_D#.bin (for example AN_D0.bin for data at day 0, AN_D2.bin
@@ -102,15 +101,21 @@ for data at day 2 etc).
   Once the ICs and experimental data are loaded to the shared memory, the `./main`
 file runs the simulation. The input arguments for the `./main` file are the following
 
-  `./main < parameter file such as params_test.txt >
-  < common perefix of the ICs/data files >  < number of GPUs (must be 1) >`
+  `./main <parameter file such as params_test.txt>
+  <common perefix of the ICs/data files>  <number of GPUs (must be 1)>`
 
-  the < common prefix of the ICs/data files > is the same as the argument in
-`./main_parent` input. In this setup each simulation takes only one GPU, and this
-argument should be set to 1.
+  the <common prefix of the ICs/data files> is the same as the argument in
+`./main_parent` input. In this setup each simulation takes only one GPU, and this argument should be set to 1.
 
   Once you have set the `doall_test.sh` you can run it by typing `./doall_test.sh`
 in the terminal (make sure that you have execution priviledges before running it).
+
+### Saving the simulation output
+To enable saving of the
+simulation results open the `Makefile` and uncomment the the line
+`SIMU_OPTION += -DSAVE_DATA`. This saves simulation output (3D matrices)
+in vtk format. To alter the time-points where saving takes place go
+to the `simulate.cu` file.
 
 ### Calibration on the continuum level
 1. Go to the TMCMC directory and compile the code by running `make`.
