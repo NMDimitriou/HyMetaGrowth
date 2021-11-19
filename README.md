@@ -67,7 +67,7 @@ simulated and experimental data.
 
 ## Instructions
 ### Test simulation on the continuum level
-1. Go to `Simulations/model`. To enable saving the
+1. Go to `Calibration_Continuum/model`. To enable saving the
 simulation results open the `Makefile` and uncomment the the line
 `SIMU_OPTION += -DSAVE_DATA`. Then run `make`.
 
@@ -81,7 +81,7 @@ change these parameters, feel free to modify the variables found in `main.cu`
 and `simulate.cu`.
 
 3. The initial conditions (ICs) for the simulation are found in
-`Simulations/IC` directory. The ICs can be the density profiles at day 0 of the
+`Calibration_Continuum/IC` directory. The ICs can be the density profiles at day 0 of the
 experimental data or your favorite 3D matrix. The ICs should be given in binary
 format. In the directory of the ICs you can also include the experimental data
 for the calibration of the model. The ICs and experimental data files should have
@@ -91,12 +91,11 @@ accompany this code correspond to days 0, 2, 5, 7, 9, 12, 14, with day 0 the IC.
 4. Once you have set the ICs, the experimental data, and the parameters open
 the `doall_test.sh` file. This file executes 3 files; the `main_parent` file
 is responsible for loading and unloading the ICs and experimental data to
-the shared memory. The `main_parent` file takes the following input format
+the shared memory, and the `main` that executes the simulation. The `main_parent` file takes the following input format
 
-  >./main_parent < start or stop >   < directory of the ICs and experimental data >    < common prefix of the ICs/data files >
+  ./main_parent < start or stop >   < directory of the ICs and experimental data >    < common prefix of the ICs/data files >
 
-    where the *start* argument loads the data, and the *stop* argument unloads the data.
-The accepted filename format for the ICs and experimental data files is
+  The accepted filename format for the ICs and experimental data files is
 < common prefix >_D#.bin (for example AN_D0.bin for data at day 0, AN_D2.bin
 for data at day 2 etc).
 
@@ -159,9 +158,9 @@ found by the TMCMC in a `best_params_< name of TMCMC file >.txt` file.
 
 3. Run the simulator by typing
 
-   `./main < path/to/parameter_file > < common prefix of data (ICs/experiments) >`
+   `./main <path/to/parameter_file> <common prefix of data (ICs/experiments)>`
 
-The output of the simulation are the files with the coordinates of the cells
+   The output of the simulation are the files with the coordinates of the cells
 and the files containing the number of cells in the corresponding time-points
 (the default is day 0, 1, 2, ... 14).
 
