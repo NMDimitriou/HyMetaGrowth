@@ -151,15 +151,11 @@ set the correct number of GPUs that will be used in the calibration.
 
    `./sample`
 
-   If you are in a cluster and you can use more than 1 GPUs, then you can run
-the calibration by typing
+   If you are in a cluster and you can use more than 1 GPUs, then you can run the calibration by typing
 
   `mpirun -np (number of GPUs, e.g. 4) ./sample`
 
-  Example of a SLURM submission script is also provided.
-Note that each simulation may take from 1 to 5 minutes in a V100 GPU by NVidia.
-Thus, the calibration may take a long time, depending on your resources and
-the parametrization.
+  Example of a SLURM submission script is also provided. Note that each simulation may take from 1 to 5 minutes in a V100 GPU by NVidia. Thus, the calibration may take a long time, depending on your resources and the parametrization.
 
 ### Visualization of parameter posterior distributions
 1. Go to the `Visualization` directory
