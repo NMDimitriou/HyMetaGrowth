@@ -4,6 +4,23 @@ Repository for calibration, simulation, and validity assessment of a
 Hybrid Discrete-Continuum model of cancer growth with applications in
 3D cancer cell cultures (paper).
 
+### Table of Contents
+- **[Code and data](#code-and-data)**<br>
+- **[Prerequisites](#prerequisites)**<br>
+- **[Introduction](#introduction)**<br>
+- **[Structure of repository](#structure-of-repository)**<br>
+- **[Instructions](#instructions)**<br>
+  - **[Test simulation on the continuum level](#Test-simulation-on-the-continuum-level)**<br>
+  - **[Saving the simulation output](#saving-the-simulation-output)**<br>
+  - **[Calibration on the continuum level](#calibration-on-the-continuum-level)**<br>
+  - **[Visualization of parameter posterior distributions](#visualization-of-parameter-posterior-distributions)**<br>
+  - **[Simulation of the Hybrid model](#simulation-of-the-Hybrid-model)**<br>
+  - **[Spatial Analysis](#spatial-analysis)**<br>
+- **[Mathematical model](#mathematical-model)**<br>
+- **[References](#references)**<br>
+- **[Support or Contact](#support-or-contact)**<br>
+- **[Citing](#citing)**<br>
+
 ## Code and data
 - The associated code can be found in the repository of [HyMetaGrowth](https://github.com/NMDimitriou/HyMetaGrowth).
 
@@ -202,7 +219,7 @@ expression of the model we use is the following:
 
 [4] Botev, Z. I., Grotowski, J. F., Kroese, D. P., & others. (2010). Kernel density estimation via diffusion. The Annals of Statistics, 38(5), 2916–2957.
 
-## Suport or Contact
+## Support or Contact
 For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill.ca
 
 ## Citing
