@@ -21,6 +21,7 @@ Hybrid Discrete-Continuum model of cancer growth with applications in
 - **[References](#references)**<br>
 - **[Support or Contact](#support-or-contact)**<br>
 - **[Citing](#citing)**<br>
+- **[A note from the author](#a-note-from-the-author)**<br>
 
 ## Code and data
 - The associated code can be found in the repository of [HyMetaGrowth](https://github.com/NMDimitriou/HyMetaGrowth).
@@ -78,10 +79,9 @@ simulated and experimental data.
 ## Instructions
 ### Converting 3D cellular coordinates to spatial density
 1. Go to the `Points2Density` directory, and open the Matlab script
-`points2density.m`. The script initially scales the space (default 2500x2500x917 μm)
-to the approximate cell size (default dx=15 μm). Then, it interpolates the
-scaled space resulting in 480x480x176 grid size that will be introduced to the
-simulator.
+`points2density.m`. The script initially scales the space (default is 2500x2500x917 μm)
+to the approximate cell size (default is dx=15 μm). Then, the scaled space is interpolated
+to a 480x480x176 grid size that will be introduced to the simulator.
 
 2. Specify the directory and common prefix of the files that the coordinated of the cells.
 The default directory and files can be found in the `res_coord_scaled` directory.
@@ -98,8 +98,8 @@ with the next step.
 
 2. **Model parameters.** Include the model parameters in the `params_test.txt` file.
 Note that the model takes 5 parameters (see the mathematical formulation in
-the following chapters) + 1 parameter for the experimental error
-(recuired for calibration).
+the following chapters) + 1 parameter for the sampling of the experimental error
+(required for calibration).
 The simulation takes place by default in 486×486×176 spatial grid point that
 corresponds to 2.5×2.5×0.9 mm^3 space. The simulation time is set to 14. To
 change these parameters, feel free to modify the variables found in `main.cu`
@@ -164,7 +164,7 @@ set the correct number of GPUs that will be used in the calibration.
 
   Example of a SLURM submission script is also provided. Note that each simulation may take from 1 to 5 minutes in a V100 GPU by NVidia. Thus, the calibration may take a long time, depending on your resources and the parametrization.
 
-### Visualization of parameter posterior distributions
+### Visualization of the parameter posterior distributions
 1. Go to the `Visualization` directory
 
 2. Open the `plot_samples.R` file (thanks to [Π4U package](https://github.com/cselab/pi4u))
@@ -190,7 +190,7 @@ found by the TMCMC in a `best_params_<name of TMCMC file>.txt` file.
 ### Spatial Analysis
 1. To plot the centroids of both experiments and simulations use the `plot_centroids.m`
 Matlab script. The `plot_centroids.m` script splits the time-points of the coordinates
-of the simulated cells and saves them in the `scale_coord` directory.
+of the simulated cells and saves them in the `scaled_coord` directory.
 
 2. The `calcEnv.R` script calculates the *K* function given the coordinates of the
 experimental and simulation results. The results can be ploted using the
@@ -226,3 +226,6 @@ For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill
 ## Citing
 If you intend to use this code in your publications, please cite:
 >Dimitriou, N. M., Flores-Torres, S., Kinsella, J. M., & Mitsis, G. D. (2021). Quantifying the Morphology and Mechanisms of Cancer Progression in 3D in-vitro environments: Integrating Experiments, Multiscale Models, and Spatial Validation. BioRxiv. https://doi.org/10.1101/2021.11.16.468856
+
+## A note from the author
+If you made it until here it means that you either seek for more help or you managed to run this code. For the latter case, Congratulations!! In case you didn't make it, I want to let you know that this code was not designed with the intention of portability and user friendliness, but mostly to get the job done with the specific data of the aforementioned paper. However, if you are interested to work on this code, I will be very happy to hear from you. :)

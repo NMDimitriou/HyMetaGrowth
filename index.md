@@ -2,7 +2,7 @@
 
 Repository for calibration, simulation, and validity assessment of a
 Hybrid Discrete-Continuum model of cancer growth with applications in
-3D cancer cell cultures (paper).
+3D cancer cell cultures ([paper](https://www.biorxiv.org/content/10.1101/2021.11.16.468856v2)).
 
 ## Code and data
 - The associated code can be found in the repository of [HyMetaGrowth](https://github.com/NMDimitriou/HyMetaGrowth).
