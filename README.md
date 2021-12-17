@@ -225,7 +225,7 @@ For any question feel free to contact me at: nikolaos.dimitriou [at] mail.mcgill
 
 ## Citing
 If you intend to use this code in your publications, please cite:
->Dimitriou, N. M., Flores-Torres, S., Kinsella, J. M., & Mitsis, G. D. (2021). Quantifying the Morphology and Mechanisms of Cancer Progression in 3D in-vitro environments: Integrating Experiments, Multiscale Models, and Spatial Validation. BioRxiv. https://doi.org/10.1101/2021.11.16.468856
+>Dimitriou, N. M., Flores-Torres, S., Kinsella, J. M., & Mitsis, G. D. (2021). Quantifying the Morphology and Mechanisms of Cancer Progression in 3D in-vitro environments: Integrating Experiments and Multiscale Models. BioRxiv. https://doi.org/10.1101/2021.11.16.468856
 
 ## A note from the author
 If you made it until here it means that you either seek for more help or you managed to run this code. For the latter case, Congratulations!! In case you didn't make it, I want to let you know that this code was not designed with the intention of portability and user friendliness, but mostly to get the job done with the specific data of the aforementioned paper. However, if you are interested in working on this code, I will be very happy to hear from you. :)
